@@ -45,8 +45,7 @@
    (directory-files eyebrowse-restore-dir)))
 
 
-
-(defun eyebrowse-restore-unused-backup-p (name)
+(defun eyebrowse-restore--unused-backup-p (name)
   (not (member
         name
         (mapcar (lambda (x) (frame-parameter x 'name))
@@ -55,7 +54,7 @@
 
 (defun eyebrowse-restore--remove-unused-backups ()
   (dolist (name (eyebrowse-restore--list-backups))
-    (if (eyebrowse-restore-unused-backup-p name)
+    (if (eyebrowse-restore--unused-backup-p name)
         (delete-file (concat (file-name-as-directory eyebrowse-restore-dir) name)))))
 
 

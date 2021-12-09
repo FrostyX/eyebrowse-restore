@@ -10,15 +10,15 @@ configurations."
   :type 'number)
 
 
-(defun eyebrowse-restore-save-window-configs ()
+(defun eyebrowse-restore-save-all ()
   "Save the Eyebrowse window configurations for all frames"
   (interactive)
   (make-directory eyebrowse-restore-dir t)
   (dolist (frame (frame-list))
-    (eyebrowse-restore-save-window-config frame)))
+    (eyebrowse-restore-save frame)))
 
 
-(defun eyebrowse-restore-save-window-config (frame)
+(defun eyebrowse-restore-save (frame)
   "Save the Eyebrowse window configurations for the current
 frame."
   (let* ((name (frame-parameter frame 'name))
@@ -74,13 +74,13 @@ doesn't correspond with any of the active frames."
 
 
 
-(add-to-list 'delete-frame-functions #'eyebrowse-restore-save-window-config)
-(run-at-time 0 eyebrowse-restore-save-interval #'eyebrowse-restore-save-window-configs)
+(add-to-list 'delete-frame-functions #'eyebrowse-restore-save)
+(run-at-time 0 eyebrowse-restore-save-interval #'eyebrowse-restore-save-all)
 
 
 
 ;; Just scratch, drop this ...
-(eyebrowse-restore-save-window-configs)
+(eyebrowse-restore-save-all)
 (eyebrowse-restore-restore)
 
 (frame-parameter nil 'name)

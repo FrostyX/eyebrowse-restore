@@ -33,6 +33,12 @@ your choice.
 
 [[images/eyebrowse-restore.png]]
 
+For a better experience, I recommend naming your Emacs frames, e.g.
+
+#+BEGIN_SRC emacs-lisp
+(set-frame-parameter nil 'name "Main")
+#+END_SRC
+
 ** Background
 
 Eyebrowse separates window configurations per Emacs frame (in opposite

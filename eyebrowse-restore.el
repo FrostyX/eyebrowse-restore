@@ -67,7 +67,7 @@ frame."
   (eyebrowse-restore--remove-unused-backups))
 
 ;;;###autoload
-(defun eyebrowse-restore-restore ()
+(defun eyebrowse-restore ()
   "Select a backup of an Eyebrowse window configurations and
 apply them to the current frame.
 

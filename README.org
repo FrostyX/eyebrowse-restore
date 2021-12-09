@@ -28,7 +28,7 @@ Apart from that, when closing an Emacs frame, its Eyebrowse window
 configurations are saved beforehand.
 
 After an Emacs crash, god forbid, simply run ~M-x
-eyebrowse-restore-restore~ to use Eyebrowse workspace from a backup of
+eyebrowse-restore~ to use Eyebrowse workspace from a backup of
 your choice.
 
 [[images/eyebrowse-restore.png]]

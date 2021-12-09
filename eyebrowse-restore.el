@@ -110,7 +110,7 @@ doesn't correspond with any of the active frames."
     (if (eyebrowse-restore--unused-backup-p name)
         (delete-file (concat (file-name-as-directory eyebrowse-restore-dir) name)))))
 
-;; @TODO
+;; @TODO This should probably be inside of eyebrowse-restore-mode
 (add-to-list 'delete-frame-functions #'eyebrowse-restore-save)
 (run-at-time 0 eyebrowse-restore-save-interval #'eyebrowse-restore-save-all)
 

@@ -1,0 +1,62 @@
+#+TITLE: eyebrowse-restore
+
+Never lose your [[https://depp.brause.cc/eyebrowse/][Eyebrowse]]
+window configurations again.
+
+** Installation
+
+The package is not available on MELPA yet, please use Quelpa (or your
+preferred package manager) to install.
+
+#+BEGIN_SRC emacs-lisp
+(use-package eyebrowse-restore
+  :ensure t
+  :quelpa (eyebrowse-restore
+           :fetcher github
+           :repo "FrostyX/eyebrowse-restore"
+           :branch "main"))
+#+END_SRC
+
+** Usage
+
+All Eyebrowse window configurations for all Emacs frames are
+automatically saved with a periodicity of
+~eyebrowse-restore-save-interval~. If you want to invoke this action
+manually, run ~M-x eyebrowse-restore-save-all~.
+
+Apart from that, when closing an Emacs frame, its Eyebrowse window
+configurations are saved beforehand.
+
+After an Emacs crash, god forbid, simply run ~M-x
+eyebrowse-restore-restore~ to use Eyebrowse workspace from a backup of
+your choice.
+
+[[images/eyebrowse-restore.png]]
+
+** Background
+
+Eyebrowse separates window configurations per Emacs frame (in opposite
+to Emacs instance). This is intended behavior and it is rooted in the
+implementation details. In a daemon setup, window configurations are
+assigned to an ~emacsclient~ frame instead of the daemon instance,
+i.e. closing an ~emacsclient~ destroys all of its Eyebrowse window
+configurations.
+
+Making window configurations shared across all Emacs frames is a
+controversial topic because the use-case is nonsensical for the
+majority of users.
+
+The main issue for me is not the absence of sharing window
+configurations across all frames but recovering from reboots, window
+manager crashes, Emacs crashes, or anything else that results in
+having to spawn a new Emacs instance from scratch.
+
+Thanks to the
+[[https://www.gnu.org/software/emacs/manual/html_node/emacs/Saving-Emacs-Sessions.html#Saving-Emacs-Sessions][desktop.el]],
+Eyebrowse supports persistent window configurations with one caveat -
+it is reliable only for single-frame use. When using multiple Emacs
+frames, it depends in what order the frames are closed, and only the
+last one is remembered.
+
+The ~eyebrowse-restore~ prevents you from losing the window
+configurations for the rest of the frames.

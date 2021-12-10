@@ -130,7 +130,7 @@ directory."
   "Return a list of unused backups while respecting the
 `eyebrowse-restore-keep-old-backups' number of unused
 backups to keep."
-  (-slice (seq-filter #'eyebrowse--restore-unused-backup-p
+  (-slice (seq-filter #'eyebrowse-restore--unused-backup-p
 					  (eyebrowse-restore--list-backups))
 		  eyebrowse-restore-keep-old-backups))
 

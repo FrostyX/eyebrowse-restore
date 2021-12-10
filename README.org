@@ -14,7 +14,9 @@ preferred package manager) to install.
   :quelpa (eyebrowse-restore
            :fetcher github
            :repo "FrostyX/eyebrowse-restore"
-           :branch "main"))
+           :branch "main")
+  :config
+  (eyebrowse-restore-mode))
 #+END_SRC
 
 ** Usage
@@ -38,6 +40,14 @@ For a better experience, I recommend naming your Emacs frames, e.g.
 #+BEGIN_SRC emacs-lisp
 (set-frame-parameter nil 'name "Main")
 #+END_SRC
+
+** Configuration
+*** Multiple Emacs instances
+
+There is no locking mechanism that would prevent multiple Emacs
+instances from overriding each other's backups. Either enable
+~eyebrowse-restore-mode~ only for one instance or configure
+~eyebrowse-restore-dir~ to a different directory for each instance.
 
 ** Background
 

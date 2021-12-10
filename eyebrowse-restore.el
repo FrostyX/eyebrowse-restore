@@ -43,6 +43,10 @@ configurations."
 configurations."
   :type 'number)
 
+(defcustom eyebrowse-restore-keep-old-backups 10
+  "How many old backups should we keep."
+  :type 'integer)
+
 ;;;; Variables
 
 (defvar eyebrowse-restore-timer nil
@@ -116,10 +120,19 @@ active frame will be destroyed."
 (defun eyebrowse-restore--list-backups ()
   "List all files stored in the `eyebrowse-restore-dir'
 directory."
-  (seq-filter
-   (lambda (x)
-     (not (member x '("." ".."))))
-   (directory-files eyebrowse-restore-dir)))
+  (let* ((with-attrs (directory-files-and-attributes eyebrowse-restore-dir))
+		 (sort-by-date #'(lambda (x y) (time-less-p (nth 5 y) (nth 5 x))))
+		 (sorted (sort with-attrs sort-by-date))
+		 (files (mapcar #'car sorted)))
+	(seq-filter (lambda (x) (not (member x '("." "..")))) files)))
+
+(defun eyebrowse-restore--list-unused-backups ()
+  "Return a list of unused backups while respecting the
+`eyebrowse-restore-keep-old-backups' number of unused
+backups to keep."
+  (-slice (seq-filter #'eyebrowse--restore-unused-backup-p
+					  (eyebrowse-restore--list-backups))
+		  eyebrowse-restore-keep-old-backups))
 
 (defun eyebrowse-restore--unused-backup-p (name)
   "Return `t' if there isn't any frame with this `name'."
@@ -130,10 +143,10 @@ directory."
 
 (defun eyebrowse-restore--remove-unused-backups ()
   "Remove all files from the `eyebrowse-restore-dir' that
-doesn't correspond with any of the active frames."
-  (dolist (name (eyebrowse-restore--list-backups))
-    (if (eyebrowse-restore--unused-backup-p name)
-        (delete-file (concat (file-name-as-directory eyebrowse-restore-dir) name)))))
+doesn't correspond with any of the active frames or is
+older than `eyebrowse-restore-keep-old-backups'."
+  (dolist (name (eyebrowse-restore--list-unused-backups))
+    (delete-file (concat (file-name-as-directory eyebrowse-restore-dir) name))))
 
 ;;;; Footer
 

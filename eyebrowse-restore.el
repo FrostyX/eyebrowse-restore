@@ -152,4 +152,4 @@ older than `eyebrowse-restore-keep-old-backups'."
 
 (provide 'eyebrowse-restore)
 
-;;; helm-dired-open.el ends here
+;;; eyebrowse-restore.el ends here

@@ -43,6 +43,31 @@ configurations."
 configurations."
   :type 'number)
 
+;;;; Variables
+
+(defvar eyebrowse-restore-timer nil
+  "Timer to automatically save Eyebrowse window configurations")
+
+;;;; Modes
+
+(define-minor-mode eyebrowse-restore-mode
+  "Toggle `eyebrowse-restore-mode'.
+This global minor mode provides a timer to automatically
+save Eyebrowse window configurations for all Emacs frames.
+It also provides a hook to save window configuration for a
+frame before closing it. "
+  :global t
+  (if eyebrowse-restore-mode
+      (progn
+        (add-to-list 'delete-frame-functions #'eyebrowse-restore-save)
+        (setq eyebrowse-restore-timer
+              (run-at-time 0 eyebrowse-restore-save-interval
+                           #'eyebrowse-restore-save-all)))
+    (progn
+      (setq delete-frame-functions
+            (delete #'eyebrowse-restore-save delete-frame-functions))
+      (cancel-timer eyebrowse-restore-timer))))
+
 ;;;; Commands
 
 ;;;###autoload
@@ -109,10 +134,6 @@ doesn't correspond with any of the active frames."
   (dolist (name (eyebrowse-restore--list-backups))
     (if (eyebrowse-restore--unused-backup-p name)
         (delete-file (concat (file-name-as-directory eyebrowse-restore-dir) name)))))
-
-;; @TODO This should probably be inside of eyebrowse-restore-mode
-(add-to-list 'delete-frame-functions #'eyebrowse-restore-save)
-(run-at-time 0 eyebrowse-restore-save-interval #'eyebrowse-restore-save-all)
 
 ;;;; Footer
 

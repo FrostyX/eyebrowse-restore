@@ -96,16 +96,16 @@ frame."
   (eyebrowse-restore--remove-unused-backups))
 
 ;;;###autoload
-(defun eyebrowse-restore ()
+(defun eyebrowse-restore (&optional name)
   "Select a backup of an Eyebrowse window configurations and
 apply them to the current frame.
 
 Warning! The current Eyebrowse window configurations for the
 active frame will be destroyed."
   (interactive)
-  (let* ((name (completing-read
-                "Eyebrowse backups: "
-                (eyebrowse-restore--list-backups)))
+  (let* ((name (or name (completing-read
+                         "Eyebrowse backups: "
+                         (eyebrowse-restore--list-backups))))
          (path (concat (file-name-as-directory eyebrowse-restore-dir) name)))
 
     (with-temp-buffer

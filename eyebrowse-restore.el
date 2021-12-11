@@ -47,6 +47,12 @@ configurations."
   "How many old backups should we keep."
   :type 'integer)
 
+(defcustom eyebrowse-restore-if-only-one t
+  "If there is only one backup in the
+`eyebrowse-restore-dir', automatically restore from it
+without prompting the user."
+  :type 'boolean)
+
 ;;;; Variables
 
 (defvar eyebrowse-restore-timer nil
@@ -103,15 +109,20 @@ apply them to the current frame.
 Warning! The current Eyebrowse window configurations for the
 active frame will be destroyed."
   (interactive)
-  (let* ((name (or name (completing-read
-                         "Eyebrowse backups: "
-                         (eyebrowse-restore--list-backups))))
-         (path (concat (file-name-as-directory eyebrowse-restore-dir) name)))
 
-    (with-temp-buffer
-      (insert-file-contents path)
-      (eyebrowse--set 'window-configs
-        (read (buffer-string))))))
+  (let ((backups (eyebrowse-restore--list-backups)))
+    (if (and (not name)
+             (= (length backups) 1)
+             eyebrowse-restore-if-only-one)
+        (eyebrowse-restore (car backups))
+
+      (let* ((name (or name (completing-read "Eyebrowse backups: " backups)))
+             (path (concat (file-name-as-directory eyebrowse-restore-dir) name)))
+
+        (with-temp-buffer
+          (insert-file-contents path)
+          (eyebrowse--set 'window-configs
+            (read (buffer-string))))))))
 
 ;;;; Functions
 

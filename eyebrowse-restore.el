@@ -94,6 +94,7 @@ frame before closing it. "
 frame."
   (interactive)
   (let* ((name (frame-parameter frame 'name))
+         (name (eyebrowse-restore--encode-name name))
          (path (concat (file-name-as-directory eyebrowse-restore-dir) name))
          (window-configs (eyebrowse--get 'window-configs frame)))
 
@@ -110,13 +111,16 @@ Warning! The current Eyebrowse window configurations for the
 active frame will be destroyed."
   (interactive)
 
-  (let ((backups (eyebrowse-restore--list-backups)))
+  (let ((name (eyebrowse-restore--decode-name name))
+        (backups (mapcar #'eyebrowse-restore--decode-name
+                         (eyebrowse-restore--list-backups))))
     (if (and (not name)
              (= (length backups) 1)
              eyebrowse-restore-if-only-one)
         (eyebrowse-restore (car backups))
 
       (let* ((name (or name (completing-read "Eyebrowse backups: " backups)))
+             (name (eyebrowse-restore--encode-name name))
              (path (concat (file-name-as-directory eyebrowse-restore-dir) name)))
 
         (with-temp-buffer
@@ -127,6 +131,18 @@ active frame will be destroyed."
 ;;;; Functions
 
 ;;;;; Private
+
+(defun eyebrowse-restore--encode-name (name)
+  "Create a safe backup name that won't cause any issues
+on the filesystem."
+  (if name
+      (s-replace "/" "%2F" name)))
+
+(defun eyebrowse-restore--decode-name (name)
+  "Convert encoded backup name back to the human-readable
+format."
+  (if name
+      (s-replace "%2F" "/" name)))
 
 (defun eyebrowse-restore--list-backups ()
   "List all files stored in the `eyebrowse-restore-dir'

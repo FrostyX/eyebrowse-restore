@@ -60,6 +60,7 @@ without prompting the user."
 
 ;;;; Modes
 
+;;;###autoload
 (define-minor-mode eyebrowse-restore-mode
   "Toggle `eyebrowse-restore-mode'.
 This global minor mode provides a timer to automatically

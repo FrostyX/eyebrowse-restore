@@ -34,13 +34,11 @@
 
 (defcustom eyebrowse-restore-dir
   (concat user-emacs-directory "eyebrowse-restore")
-  "Path to the directory where to store Eyebrowse window
-configurations."
+  "Path to the directory where to store Eyebrowse window configs."
   :type 'directory)
 
 (defcustom eyebrowse-restore-save-interval 300
-  "How often (in seconds) to save all Eyebrowse window
-configurations."
+  "How often (in seconds) to save all Eyebrowse window configs."
   :type 'number)
 
 (defcustom eyebrowse-restore-keep-old-backups 10
@@ -48,15 +46,15 @@ configurations."
   :type 'integer)
 
 (defcustom eyebrowse-restore-if-only-one t
-  "If there is only one backup in the
-`eyebrowse-restore-dir', automatically restore from it
-without prompting the user."
+  "Restore without asking?
+If there is only one backup in the `eyebrowse-restore-dir',
+automatically restore from it without prompting the user."
   :type 'boolean)
 
 ;;;; Variables
 
 (defvar eyebrowse-restore-timer nil
-  "Timer to automatically save Eyebrowse window configurations")
+  "Timer to automatically save Eyebrowse window configurations.")
 
 ;;;; Modes
 
@@ -66,7 +64,7 @@ without prompting the user."
 This global minor mode provides a timer to automatically
 save Eyebrowse window configurations for all Emacs frames.
 It also provides a hook to save window configuration for a
-frame before closing it. "
+frame before closing it."
   :global t
   (if eyebrowse-restore-mode
       (progn
@@ -83,7 +81,7 @@ frame before closing it. "
 
 ;;;###autoload
 (defun eyebrowse-restore-save-all ()
-  "Save the Eyebrowse window configurations for all frames"
+  "Save the Eyebrowse window configurations for all frames."
   (interactive)
   (make-directory eyebrowse-restore-dir t)
   (dolist (frame (frame-list))
@@ -91,8 +89,7 @@ frame before closing it. "
 
 ;;;###autoload
 (defun eyebrowse-restore-save (frame)
-  "Save the Eyebrowse window configurations for the current
-frame."
+  "Save the Eyebrowse window configurations for the specified FRAME."
   (interactive)
   (let* ((name (frame-parameter frame 'name))
          (name (eyebrowse-restore--encode-name name))
@@ -105,8 +102,11 @@ frame."
 
 ;;;###autoload
 (defun eyebrowse-restore (&optional name)
-  "Select a backup of an Eyebrowse window configurations and
-apply them to the current frame.
+  "Restore an Eyebrowse window configuration from a backup.
+
+If a backup NAME is not specified, a `completing-read' with
+backup names appears.  Selected backup of an Eyebrowse window
+configurations is applied to the current frame.
 
 Warning! The current Eyebrowse window configurations for the
 active frame will be destroyed."
@@ -134,20 +134,20 @@ active frame will be destroyed."
 ;;;;; Private
 
 (defun eyebrowse-restore--encode-name (name)
-  "Create a safe backup name that won't cause any issues
+  "Generate a backup file.
+Create a safe backup name based on an input string, ideally
+a frame NAME.  The returned name should not cause any issues
 on the filesystem."
   (if name
       (s-replace "/" "%2F" name)))
 
 (defun eyebrowse-restore--decode-name (name)
-  "Convert encoded backup name back to the human-readable
-format."
+  "Convert encoded backup NAME back to the human-readable format."
   (if name
       (s-replace "%2F" "/" name)))
 
 (defun eyebrowse-restore--list-backups ()
-  "List all files stored in the `eyebrowse-restore-dir'
-directory."
+  "List all files stored in the `eyebrowse-restore-dir'directory."
   (let* ((with-attrs (directory-files-and-attributes eyebrowse-restore-dir))
 		 (sort-by-date #'(lambda (x y) (time-less-p (nth 5 y) (nth 5 x))))
 		 (sorted (sort with-attrs sort-by-date))
@@ -155,7 +155,8 @@ directory."
 	(seq-filter (lambda (x) (not (member x '("." "..")))) files)))
 
 (defun eyebrowse-restore--list-unused-backups ()
-  "Return a list of unused backups while respecting the
+  "Return unused backups.
+Return a list of unused backups while respecting the
 `eyebrowse-restore-keep-old-backups' number of unused
 backups to keep."
   (-slice (seq-filter #'eyebrowse-restore--unused-backup-p
@@ -163,14 +164,15 @@ backups to keep."
 		  eyebrowse-restore-keep-old-backups))
 
 (defun eyebrowse-restore--unused-backup-p (name)
-  "Return `t' if there isn't any frame with this `name'."
+  "Return t if there isn't any frame with this `NAME'."
   (not (member
         name
         (mapcar (lambda (x) (frame-parameter x 'name))
                 (frame-list)))))
 
 (defun eyebrowse-restore--remove-unused-backups ()
-  "Remove all files from the `eyebrowse-restore-dir' that
+  "Remove unused backups.
+Remove all files from the `eyebrowse-restore-dir' that
 doesn't correspond with any of the active frames or is
 older than `eyebrowse-restore-keep-old-backups'."
   (dolist (name (eyebrowse-restore--list-unused-backups))

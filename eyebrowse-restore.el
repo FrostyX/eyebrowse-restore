@@ -4,7 +4,7 @@
 
 ;; Author: Jakub Kadlčík <frostyx@email.cz>
 ;; URL: https://github.com/FrostyX/eyebrowse-restore
-;; Version: 0.1-pre
+;; Version: 1.0
 ;; Package-Requires: ((emacs "26.3"))
 ;; Keywords: eyebrowse, helm, persistent
 

@@ -36,24 +36,33 @@
 
 ;;;; Customization
 
+(defgroup eyebrowse-restore nil
+  "Persistent Eyebrowse for all frames"
+  :prefix "eyebrowse-restore-"
+  :group 'eyebrowse)
+
 (defcustom eyebrowse-restore-dir
   (concat user-emacs-directory "eyebrowse-restore")
   "Path to the directory where to store Eyebrowse window configs."
-  :type 'directory)
+  :type 'directory
+  :group eyebrowse-restore)
 
 (defcustom eyebrowse-restore-save-interval 300
   "How often (in seconds) to save all Eyebrowse window configs."
-  :type 'number)
+  :type 'number
+  :group eyebrowse-restore)
 
 (defcustom eyebrowse-restore-keep-old-backups 10
   "How many old backups should we keep."
-  :type 'integer)
+  :type 'integer
+  :group eyebrowse-restore)
 
 (defcustom eyebrowse-restore-if-only-one t
   "Restore without asking?
 If there is only one backup in the `eyebrowse-restore-dir',
 automatically restore from it without prompting the user."
-  :type 'boolean)
+  :type 'boolean
+  :group eyebrowse-restore)
 
 ;;;; Variables
 

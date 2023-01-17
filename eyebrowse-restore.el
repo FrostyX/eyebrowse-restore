@@ -162,7 +162,7 @@ on the filesystem."
 (defun eyebrowse-restore--list-backups ()
   "List all files stored in the `eyebrowse-restore-dir'directory."
   (let* ((with-attrs (directory-files-and-attributes eyebrowse-restore-dir))
-		 (sort-by-date #'(lambda (x y) (time-less-p (nth 5 y) (nth 5 x))))
+		 (sort-by-date (lambda (x y) (time-less-p (nth 5 y) (nth 5 x))))
 		 (sorted (sort with-attrs sort-by-date))
 		 (files (mapcar #'car sorted)))
 	(seq-filter (lambda (x) (not (member x '("." "..")))) files)))

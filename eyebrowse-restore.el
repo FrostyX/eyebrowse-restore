@@ -45,24 +45,24 @@
   (concat user-emacs-directory "eyebrowse-restore")
   "Path to the directory where to store Eyebrowse window configs."
   :type 'directory
-  :group eyebrowse-restore)
+  :group 'eyebrowse-restore)
 
 (defcustom eyebrowse-restore-save-interval 300
   "How often (in seconds) to save all Eyebrowse window configs."
   :type 'number
-  :group eyebrowse-restore)
+  :group 'eyebrowse-restore)
 
 (defcustom eyebrowse-restore-keep-old-backups 10
   "How many old backups should we keep."
   :type 'integer
-  :group eyebrowse-restore)
+  :group 'eyebrowse-restore)
 
 (defcustom eyebrowse-restore-if-only-one t
   "Restore without asking?
 If there is only one backup in the `eyebrowse-restore-dir',
 automatically restore from it without prompting the user."
   :type 'boolean
-  :group eyebrowse-restore)
+  :group 'eyebrowse-restore)
 
 ;;;; Variables
 

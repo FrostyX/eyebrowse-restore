@@ -6,7 +6,7 @@
 ;; URL: https://github.com/FrostyX/eyebrowse-restore
 ;; Version: 1.0
 ;; Package-Requires: ((emacs "26.3") (eyebrowse "0.7.8") (dash "2.19.1") (s "1.13.0"))
-;; Keywords: eyebrowse, helm, persistent
+;; Keywords: convenience, eyebrowse, helm, persistent
 
 ;;; License:
 

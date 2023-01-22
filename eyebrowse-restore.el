@@ -37,7 +37,7 @@
 ;;;; Customization
 
 (defgroup eyebrowse-restore nil
-  "Persistent Eyebrowse for all frames"
+  "Persistent Eyebrowse for all frames."
   :prefix "eyebrowse-restore-"
   :group 'eyebrowse)
 

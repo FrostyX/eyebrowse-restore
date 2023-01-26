@@ -5,8 +5,16 @@ window configurations again.
 
 ** Installation
 
-The package is not available on MELPA yet, please use Quelpa (or your
-preferred package manager) to install.
+The package is in MELPA
+
+#+BEGIN_SRC emacs-lisp
+(use-package eyebrowse-restore
+  :ensure t
+  :config
+  (eyebrowse-restore-mode))
+#+END_SRC
+
+Or install it from upstream using Quelpa (or your preferred package manager)
 
 #+BEGIN_SRC emacs-lisp
 (use-package eyebrowse-restore

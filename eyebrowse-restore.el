@@ -48,7 +48,8 @@
   :group 'eyebrowse-restore)
 
 (defcustom eyebrowse-restore-save-interval 300
-  "How often (in seconds) to save all Eyebrowse window configs."
+  "How often (in seconds) to save all Eyebrowse window configs.
+If the interval is set to `nil', the timer is not run."
   :type 'number
   :group 'eyebrowse-restore)
 
@@ -82,13 +83,12 @@ frame before closing it."
   (if eyebrowse-restore-mode
       (progn
         (add-to-list 'delete-frame-functions #'eyebrowse-restore-save)
-        (setq eyebrowse-restore-timer
-              (run-at-time 0 eyebrowse-restore-save-interval
-                           #'eyebrowse-restore-save-all)))
+        (eyebrowse-restore--run-timer))
+
     (progn
       (setq delete-frame-functions
             (delete #'eyebrowse-restore-save delete-frame-functions))
-      (cancel-timer eyebrowse-restore-timer))))
+      (eyebrowse-restore--cancel-timer))))
 
 ;;;; Commands
 
@@ -145,6 +145,18 @@ active frame will be destroyed."
 ;;;; Functions
 
 ;;;;; Private
+
+(defun eyebrowse-restore--run-timer ()
+  "Run the `eyebrowse-restore-timer'."
+  (when eyebrowse-restore-save-interval
+    (setq eyebrowse-restore-timer
+          (run-at-time 0 eyebrowse-restore-save-interval
+                       #'eyebrowse-restore-save-all))))
+
+(defun eyebrowse-restore--cancel-timer ()
+  "Cancel the `eyebrowse-restore-timer'."
+  (when eyebrowse-restore-timer
+    (cancel-timer eyebrowse-restore-timer)))
 
 (defun eyebrowse-restore--encode-name (name)
   "Generate a backup file.

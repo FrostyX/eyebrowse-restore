@@ -98,7 +98,9 @@ frame before closing it."
   (interactive)
   (make-directory eyebrowse-restore-dir t)
   (dolist (frame (frame-list))
-    (eyebrowse-restore-save frame)))
+    ;; Ignore child frames (completion, minibuffer, etc)
+    (unless (frame-parameter frame 'parent-frame)
+      (eyebrowse-restore-save frame))))
 
 ;;;###autoload
 (defun eyebrowse-restore-save (frame)
